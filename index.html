@@ -9,9 +9,10 @@
         body {
             font-family: Arial, sans-serif;
             text-align: center;
-            background-color: #f4f4f4;
+            background-color: #ffd1dc; /* Màu hồng nhẹ */
             margin: 0;
             padding: 0;
+            position: relative;
         }
         h1 {
             margin-top: 50px;
@@ -31,7 +32,7 @@
             margin-right: auto;
             border: 2px solid #ccc;
             border-radius: 10px;
-            background: white;
+            background: #ffd1dc;
             position: relative;
         }
         button {
@@ -76,6 +77,37 @@
             box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
             font-family: "Poppins", sans-serif;
             color: #e65100;
+            animation: shake 0.3s infinite alternate;
+        }
+        @keyframes shake {
+            0% { transform: translate(-50%, -50%) rotate(-2deg); }
+            100% { transform: translate(-50%, -50%) rotate(2deg); }
+        }
+        .flower {
+            position: fixed;
+            width: 250px;
+            height: 250px;
+            animation: sway 2s infinite alternate ease-in-out;
+        }
+        .flower.top-left {
+            top: 0;
+            left: 0;
+        }
+        .flower.top-right {
+            top: 0;
+            right: 0;
+        }
+        .flower.bottom-left {
+            bottom: 0;
+            left: 0;
+        }
+        .flower.bottom-right {
+            bottom: 0;
+            right: 0;
+        }
+        @keyframes sway {
+            0% { transform: rotate(-5deg); }
+            100% { transform: rotate(5deg); }
         }
     </style>
 </head>
@@ -83,12 +115,50 @@
     <h1>🎉 Bạn có muốn nhận lời chúc 8/3 không? 💐</h1>
 
     <div class="button-container">
-        <button id="yes" onclick="clickYes()">Éo! Ko thèm</button>
+        <button id="yes" onmouseover="hoveredYes()" onclick="clickYes()">Éo! Ko thèm</button>
         <button id="no" onmouseover="hoveredNo()">Có nha ní</button>
     </div>
     <div id="chatBox" class="chat-box"></div>
-
+    <audio id="bg-music" autoplay loop>
+        <source src="roundandround.mp3" type="audio/mpeg">
+        Trình duyệt của bạn không hỗ trợ phát nhạc.
+    </audio>
+    
+    <img src="pam1.png" class="flower top-left">
+    <img src="pam2.png" class="flower top-right">
+    <img src="pam3.png" class="flower bottom-left">
+    <img src="pam4.png" class="flower bottom-right">
+    
     <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const audio = document.getElementById("bg-music");
+            audio.muted = true;
+            audio.play().catch(error => console.log("Trình duyệt chặn autoplay:", error));
+        });
+    
+        document.addEventListener("click", function () {
+            const audio = document.getElementById("bg-music");
+            if (audio.muted) {
+                audio.muted = false;
+                audio.play();
+            }
+        });
+    
+        let yesMoves = 0;
+        function hoveredYes() {
+            if (yesMoves < 10) {
+                var btn = document.getElementById("yes");
+                var container = document.querySelector(".button-container");
+                var maxTop = container.clientHeight - btn.clientHeight;
+                var maxLeft = container.clientWidth - btn.clientWidth;
+                var top = Math.floor(Math.random() * maxTop);
+                var left = Math.floor(Math.random() * maxLeft);
+                btn.style.top = top + "px";
+                btn.style.left = left + "px";
+                yesMoves++;
+            }
+        }
+    
         function hoveredNo() {
             var btn = document.getElementById("no");
             var container = document.querySelector(".button-container");
@@ -99,12 +169,12 @@
             btn.style.top = top + "px";
             btn.style.left = left + "px";
         }
-
+    
         function clickYes() {
             document.getElementById("yes").style.display = "none";
             document.getElementById("no").style.display = "none";
             var chatBox = document.getElementById("chatBox");
-            chatBox.innerText = "Đấy, ngay từ đầu bấm không nhận có phải là nhanh không. Thôi thì cũng chúc bạn có một ngày 8/3 vui vẻ, nhiều may mắn, ngày càng xinh gái và thành công hennn";
+            chatBox.innerText = "Đấy, ngay từ đầu bấm không nhận có phải là nhanh không. Thôi thì cũng chúc bạn có một ngày 8/3 vui vẻ, nhiều may mắn, ngày càng xinh gái và thành công hennn🎉🎉🎉";
             chatBox.style.display = "block";
         }
     </script>
